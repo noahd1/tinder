@@ -11,10 +11,23 @@ module Tinder
   class ListenFailed < Error; end
 
   def self.logger
-    @logger ||= Logger.new(ENV['TINDER_LOGGING'] ? STDOUT : nil)
+    @logger ||= Logger.new(tinder_log)
   end
 
   def self.logger=(logger)
     @logger = logger
   end
+
+protected
+
+  def self.tinder_log
+    if ENV['TINDER_LOGGING']
+      STDOUT
+    elsif ENV['TINDER_LOGFILE']
+      ENV['TINDER_LOGFILE']
+    else
+      nil
+    end
+  end
+
 end
