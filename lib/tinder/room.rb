@@ -162,6 +162,14 @@ module Tinder
           Tinder.logger.info "Got an error while listening to room #{@name}: #{message.inspect}"
         end
 
+        @stream.on_reconnect do |timeout, retries|
+          Tinder.logger.info "Retry ##{retries}, reconnecting in: #{timeout} seconds"
+        end
+
+        @stream.on_close do
+          Tinder.logger.info "Connection was closed"
+        end
+
         @stream.on_max_reconnects do |timeout, retries|
           Tinder.logger.info "Tried #{retries} times to connect. Got disconnected from #{@name}!"
         end
